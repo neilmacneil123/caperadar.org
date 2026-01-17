@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cape Radar IT | Managed IT & Backup Recovery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0b1016;
+        --coal: #171f2b;
+        --pearl: #f6f4ef;
+        --sea: #2b8c9f;
+        --lagoon: #2cc2b7;
+        --sand: #f0d9b5;
+        --rust: #d66b4c;
+        --glow: rgba(44, 194, 183, 0.35);
+        --shadow: 0 20px 50px rgba(11, 16, 22, 0.18);
+        --radius-lg: 28px;
+        --radius-md: 18px;
+        --radius-sm: 10px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--coal);
+        background: radial-gradient(circle at 20% -20%, #a7f2e7 0%, #f7f1e6 48%, #f1e7d8 100%);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .page {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page::before,
+      .page::after {
+        content: "";
+        position: absolute;
+        width: 680px;
+        height: 680px;
+        background: radial-gradient(circle, rgba(214, 107, 76, 0.25), transparent 70%);
+        top: -200px;
+        right: -280px;
+        z-index: 0;
+      }
+
+      .page::after {
+        width: 520px;
+        height: 520px;
+        background: radial-gradient(circle, rgba(43, 140, 159, 0.22), transparent 70%);
+        bottom: -240px;
+        left: -200px;
+      }
+
+      .container {
+        width: min(1200px, 90vw);
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 28px 0 20px;
+      }
+
+      .logo {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .logo span {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.25em;
+      }
+
+      nav {
+        display: flex;
+        gap: 24px;
+        font-weight: 500;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 22px;
+        border-radius: 999px;
+        border: 1px solid rgba(11, 16, 22, 0.15);
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        font-weight: 600;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button.primary {
+        background: var(--coal);
+        color: var(--pearl);
+        border-color: transparent;
+        box-shadow: 0 16px 30px rgba(23, 31, 43, 0.35);
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(23, 31, 43, 0.2);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+        align-items: center;
+        padding: 70px 0 40px;
+      }
+
+      .hero h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2.6rem, 4vw, 4.3rem);
+        line-height: 1.05;
+        color: var(--ink);
+        margin-bottom: 18px;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 28px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .hero-card {
+        background: rgba(255, 255, 255, 0.82);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(23, 31, 43, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(130deg, transparent 40%, rgba(44, 194, 183, 0.25) 100%);
+        pointer-events: none;
+      }
+
+      .hero-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 18px;
+      }
+
+      .hero-card ul {
+        list-style: none;
+        display: grid;
+        gap: 14px;
+      }
+
+      .hero-card li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--lagoon);
+        box-shadow: 0 0 12px var(--glow);
+      }
+
+      .section {
+        padding: 70px 0;
+      }
+
+      .section h2 {
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        font-family: "Fraunces", serif;
+        color: var(--ink);
+        margin-bottom: 14px;
+      }
+
+      .section p.lead {
+        font-size: 1.05rem;
+        max-width: 720px;
+        margin-bottom: 36px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 24px;
+      }
+
+      .services {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: var(--radius-md);
+        padding: 26px;
+        border: 1px solid rgba(23, 31, 43, 0.08);
+        box-shadow: 0 10px 26px rgba(23, 31, 43, 0.08);
+      }
+
+      .card h3 {
+        margin-bottom: 12px;
+        font-size: 1.1rem;
+      }
+
+      .highlight {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 32px;
+        align-items: stretch;
+      }
+
+      .veeam-panel {
+        background: var(--coal);
+        color: var(--pearl);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .veeam-panel::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: rgba(44, 194, 183, 0.22);
+        filter: blur(1px);
+      }
+
+      .veeam-panel h3 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+      }
+
+      .veeam-panel ul {
+        list-style: none;
+        display: grid;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .veeam-panel li {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .pill {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(44, 194, 183, 0.2);
+        margin-bottom: 14px;
+      }
+
+      .process {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .process-step {
+        border-left: 2px solid rgba(23, 31, 43, 0.15);
+        padding-left: 18px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin-top: 36px;
+      }
+
+      .stat {
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        text-align: center;
+        border: 1px solid rgba(23, 31, 43, 0.06);
+      }
+
+      .stat strong {
+        font-size: 2rem;
+        display: block;
+        color: var(--ink);
+      }
+
+      .cta {
+        background: linear-gradient(120deg, rgba(43, 140, 159, 0.9), rgba(44, 194, 183, 0.85));
+        color: var(--pearl);
+        border-radius: var(--radius-lg);
+        padding: 40px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .cta h3 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+      }
+
+      footer {
+        padding: 30px 0 50px;
+        font-size: 0.95rem;
+        color: rgba(23, 31, 43, 0.7);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .fade-in {
+        opacity: 0;
+        transform: translateY(18px);
+        animation: fadeUp 0.8s ease forwards;
+      }
+
+      .fade-in:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+
+      .fade-in:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      .fade-in:nth-child(4) {
+        animation-delay: 0.45s;
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 900px) {
+        nav {
+          display: none;
+        }
+      }
+
+      @media (max-width: 720px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .hero {
+          padding-top: 40px;
+        }
+
+        .cta {
+          padding: 32px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fade-in {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="container">
+        <header>
+          <div class="logo">
+            Cape Radar IT
+            <span>Managed Technology</span>
+          </div>
+          <nav>
+            <a href="#services">Services</a>
+            <a href="#veeam">Backup & Recovery</a>
+            <a href="#process">Process</a>
+            <a href="#contact">Contact</a>
+          </nav>
+          <a class="button" href="#contact">Schedule a consult</a>
+        </header>
+
+        <section class="hero">
+          <div>
+            <h1 class="fade-in">
+              Reliable managed IT with a recovery-first strategy.
+            </h1>
+            <p class="fade-in">
+              We design, provision, and protect office networks with hosted cloud services,
+              onsite support, and recovery-first strategies that keep you online and compliant.
+            </p>
+            <div class="hero-actions fade-in">
+              <a class="button primary" href="#contact">Get a backup assessment</a>
+              <a class="button" href="#services">Explore services</a>
+            </div>
+          </div>
+          <div class="hero-card fade-in">
+            <h3>Always-on coverage for growing teams</h3>
+            <ul>
+              <li><span class="dot"></span>24/7 monitoring and response</li>
+              <li><span class="dot"></span>Cloud-first provisioning + hybrid builds</li>
+              <li><span class="dot"></span>Verified backups and recovery drills</li>
+              <li><span class="dot"></span>Disaster recovery runbooks</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <section class="section" id="services">
+        <div class="container">
+          <h2>Managed IT built for uptime</h2>
+          <p class="lead">
+            We handle everything from single-location offices to multi-site organizations. Our
+            team designs infrastructure, supports users, and keeps your business protected.
+          </p>
+          <div class="grid services">
+            <div class="card fade-in">
+              <h3>Hosted Cloud Services</h3>
+              <p>
+                Microsoft 365, private cloud, and hybrid hosting with secure onboarding,
+                identity management, and continuous monitoring.
+              </p>
+            </div>
+            <div class="card fade-in">
+              <h3>Onsite Support</h3>
+              <p>
+                Fast response for deskside support, hardware maintenance, and proactive
+                equipment lifecycle planning.
+              </p>
+            </div>
+            <div class="card fade-in">
+              <h3>Network Setup & Provisioning</h3>
+              <p>
+                Structured cabling, Wi-Fi coverage maps, firewall deployment, and office
+                buildouts tailored to your workflow.
+              </p>
+            </div>
+            <div class="card fade-in">
+              <h3>Security & Compliance</h3>
+              <p>
+                Endpoint protection, patch management, MFA hardening, and audit-ready reporting
+                for regulated industries.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="veeam">
+        <div class="container highlight">
+          <div>
+            <h2>Backup & recovery, engineered around Veeam</h2>
+            <p class="lead">
+              Our backup strategy is centered on Veeam best practices: immutable storage,
+              rapid restore testing, and clear RPO/RTO targets.
+            </p>
+            <div class="stats">
+              <div class="stat">
+                <strong>15 min</strong>
+                Average restore testing cadence
+              </div>
+              <div class="stat">
+                <strong>3-2-1</strong>
+                Best practice backup architecture
+              </div>
+              <div class="stat">
+                <strong>99.99%</strong>
+                Monitoring uptime commitment
+              </div>
+            </div>
+          </div>
+          <div class="veeam-panel">
+            <span class="pill">Veeam Focus</span>
+            <h3>Recovery plans that actually work</h3>
+            <p>
+              From onsite repositories to cloud archive targets, we configure and manage your
+              Veeam environment end-to-end, with regular health checks and documentation.
+            </p>
+            <ul>
+              <li><span class="dot"></span>Immutable storage + ransomware protection</li>
+              <li><span class="dot"></span>SureBackup verification for every backup</li>
+              <li><span class="dot"></span>Instant VM + file-level restore workflows</li>
+              <li><span class="dot"></span>Recovery drills with executive reporting</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <div class="container">
+          <h2>Our engagement process</h2>
+          <p class="lead">
+            Clear, documented steps so your team always knows what to expect.
+          </p>
+          <div class="grid process">
+            <div class="process-step fade-in">
+              <h3>1. Discovery</h3>
+              <p>Network audit, backup inventory, and workload mapping.</p>
+            </div>
+            <div class="process-step fade-in">
+              <h3>2. Blueprint</h3>
+              <p>Design for hosted services, security posture, and recovery goals.</p>
+            </div>
+            <div class="process-step fade-in">
+              <h3>3. Deployment</h3>
+              <p>Provisioning, migration, and service onboarding with minimal downtime.</p>
+            </div>
+            <div class="process-step fade-in">
+              <h3>4. Managed Care</h3>
+              <p>Monitoring, patching, support desk, and quarterly strategy reviews.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="container">
+          <div class="cta">
+            <div>
+              <h3>Ready for reliable recovery?</h3>
+              <p>Let us assess your backup posture and map a path to full resilience.</p>
+            </div>
+            <div class="hero-actions">
+              <a class="button primary" href="mailto:web@caperadar.org">Email us</a>
+              <a class="button" href="tel:+19025777533">Call 902-577-7533</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container">
+        <footer>
+          <span>© 2025 Cape Radar IT. Managed services for resilient teams.</span>
+          <span>Serving onsite, remote, and hybrid businesses.</span>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
