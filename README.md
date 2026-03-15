@@ -1,34 +1,21 @@
-# USMT TUI for Windows
+# caperadar.org
 
-This repository now contains a terminal-based USMT wrapper inspired by the
-`UsmtGui10` workflow, but designed for Windows terminals.
+Static site for `caperadar.org`, served by Nginx in Docker.
 
-## What it does
+## Contents
 
-- Builds and runs `scanstate.exe` commands for capture.
-- Builds and runs `loadstate.exe` commands for restore.
-- Lets you manage common USMT options in an interactive TUI-style menu.
-- Saves your settings to `usmt_tui_config.json` for reuse.
+- `index.html`: single-page site
+- `Dockerfile`: minimal Nginx image
+- `docker-compose.yml`: local container runner
 
 ## Run
 
-```powershell
-python usmt_tui.py
+```bash
+docker compose up --build
 ```
+
+The site will be available at `http://localhost:8080`.
 
 ## Notes
 
-- This tool assumes USMT is already installed (for example through ADK).
-- Default USMT path is `C:\Program Files\USMT` and can be changed in settings.
-- User include/exclude syntax:
-  - `*` = all users
-  - `alice,bob` = include those users
-  - `!tempuser` = exclude a user
-
-## Example flow
-
-1. Open tool.
-2. Edit settings (paths, XML files, switches).
-3. Preview generated commands.
-4. Run ScanState on source machine.
-5. Run LoadState on destination machine.
+The USMT Python tooling has been moved out of this repository into `/root/usmt-tui`.
