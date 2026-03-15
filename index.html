@@ -1,587 +1,633 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cape Radar IT | Managed IT & Backup Recovery</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --ink: #0b1016;
-        --coal: #171f2b;
-        --pearl: #f6f4ef;
-        --sea: #2b8c9f;
-        --lagoon: #2cc2b7;
-        --sand: #f0d9b5;
-        --rust: #d66b4c;
-        --glow: rgba(44, 194, 183, 0.35);
-        --shadow: 0 20px 50px rgba(11, 16, 22, 0.18);
-        --radius-lg: 28px;
-        --radius-md: 18px;
-        --radius-sm: 10px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>caperadar.org — Practical IT & Network Intelligence</title>
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #020617;
+      --fg: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --border: #1e293b;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #0b1220, var(--bg));
+      color: var(--fg);
+      line-height: 1.6;
+    }
 
-      body {
-        font-family: "Space Grotesk", sans-serif;
-        color: var(--coal);
-        background: radial-gradient(circle at 20% -20%, #a7f2e7 0%, #f7f1e6 48%, #f1e7d8 100%);
-        min-height: 100vh;
-        line-height: 1.6;
-      }
+    header {
+      padding: 5rem 1.5rem 4rem;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 280px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 320px;
+      max-width: 100%;
+    }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 1.5rem 0 0.5rem;
+      flex: 1 1 100%;
+    }
+    .tagline { color: var(--muted); max-width: 700px; }
 
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
+    section {
+      max-width: 1100px;
+      margin: auto;
+      padding: 3rem 1.5rem;
+    }
 
-      .page {
-        position: relative;
-        overflow: hidden;
-      }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: linear-gradient(180deg, #020617, #020617aa);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .card h3 { margin: 0.75rem 0 0.25rem; }
+    .card p { color: var(--muted); margin: 0; }
 
-      .page::before,
-      .page::after {
-        content: "";
-        position: absolute;
-        width: 680px;
-        height: 680px;
-        background: radial-gradient(circle, rgba(214, 107, 76, 0.25), transparent 70%);
-        top: -200px;
-        right: -280px;
-        z-index: 0;
-      }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--muted);
+    }
 
-      .page::after {
-        width: 520px;
-        height: 520px;
-        background: radial-gradient(circle, rgba(43, 140, 159, 0.22), transparent 70%);
-        bottom: -240px;
-        left: -200px;
-      }
+    /* Corner mascot canvas (optional) */
+    #banana-mascot {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 220px;
+      height: 220px;
+      pointer-events: none;
+      z-index: 10;
+    }
 
-      .container {
-        width: min(1200px, 90vw);
-        margin: 0 auto;
-        position: relative;
-        z-index: 1;
-      }
+    /* Datacenter section */
+    .dc-wrap {
+      background: linear-gradient(180deg, #020617, #020617aa);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .dc-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .dc-topbar strong { color: var(--fg); font-weight: 600; }
+    .dc-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--fg);
+      padding: 0.45rem 0.65rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn:hover { border-color: #334155; }
+    .dc-canvas {
+      width: 100%;
+      height: 420px;
+      display: block;
+      background: radial-gradient(900px 360px at 50% 10%, rgba(56,189,248,0.08), rgba(2,6,23,0) 60%);
+    }
+    .dc-hint {
+      padding: 0.75rem 1rem 1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
 
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 28px 0 20px;
-      }
+    .notice {
+      border-top: 1px solid var(--border);
+      padding: 0.9rem 1rem;
+      background: rgba(2, 6, 23, 0.85);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .notice strong { color: var(--fg); }
+    .notice .warn { color: var(--warn); }
+    .notice .bad { color: var(--bad); }
+    .notice code { color: var(--fg); }
 
-      .logo {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
+    /* Fullscreen */
+    .dc-fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      border-radius: 0;
+    }
+    .dc-fullscreen .dc-canvas { height: calc(100vh - 56px); }
 
-      .logo span {
-        font-size: 12px;
-        font-weight: 500;
-        letter-spacing: 0.25em;
-      }
+    @media (max-width: 520px) {
+      #banana-mascot { width: 160px; height: 160px; }
+      .dc-canvas { height: 360px; }
+      .logo { width: 260px; }
+    }
+  </style>
+</head>
+<body>
 
-      nav {
-        display: flex;
-        gap: 24px;
-        font-weight: 500;
-      }
+<header>
+  <div class="brand">
+    <div class="logo">
+      <!-- Clean inline SVG logo (no external assets; no clipping/overlap) -->
+      <svg width="300" height="56" viewBox="0 0 600 112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="caperadar.org logo">
+        <defs>
+          <linearGradient id="bananaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffe86a"/>
+            <stop offset="100%" stop-color="#ffd400"/>
+          </linearGradient>
+        </defs>
 
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 22px;
-        border-radius: 999px;
-        border: 1px solid rgba(11, 16, 22, 0.15);
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(12px);
-        font-weight: 600;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
+        <!-- Banana mascot (tight bounding box) -->
+        <path d="M60 14 C34 24 34 84 66 94 C86 100 100 84 106 70 C96 76 84 74 78 62 C72 50 78 32 92 26 C82 22 70 18 60 14 Z"
+              fill="url(#bananaGrad)" stroke="#0b1220" stroke-width="4"/>
 
-      .button.primary {
-        background: var(--coal);
-        color: var(--pearl);
-        border-color: transparent;
-        box-shadow: 0 16px 30px rgba(23, 31, 43, 0.35);
-      }
+        <!-- Face -->
+        <circle cx="72" cy="42" r="2.8" fill="#0b1220"/>
+        <circle cx="82" cy="40" r="2.8" fill="#0b1220"/>
+        <path d="M72 50 Q79 54 86 50" fill="none" stroke="#0b1220" stroke-width="2.5" stroke-linecap="round"/>
 
-      .button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(23, 31, 43, 0.2);
-      }
+        <!-- Hard hat -->
+        <path d="M58 28 C58 18 102 18 102 28 L102 34 L58 34 Z"
+              fill="#cbd5e1" stroke="#0b1220" stroke-width="4"/>
+        <path d="M52 34 H108" stroke="#0b1220" stroke-width="4" stroke-linecap="round"/>
 
-      .hero {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 40px;
-        align-items: center;
-        padding: 70px 0 40px;
-      }
+        <!-- Cable -->
+        <path d="M56 74 C34 90 32 100 42 106" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round"/>
+        <rect x="38" y="102" width="14" height="6" rx="2" fill="#2563eb" stroke="#0b1220" stroke-width="2"/>
 
-      .hero h1 {
-        font-family: "Fraunces", serif;
-        font-size: clamp(2.6rem, 4vw, 4.3rem);
-        line-height: 1.05;
-        color: var(--ink);
-        margin-bottom: 18px;
-      }
+        <!-- Brand text -->
+        <text x="130" y="72" font-size="48" font-family="system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif"
+              font-weight="700" fill="#e5e7eb">caperadar</text>
+        <text x="360" y="72" font-size="28" font-family="system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif"
+              font-weight="500" fill="#94a3b8">.org</text>
+      </svg>
+    </div>
+    <strong>caperadar.org</strong>
+  </div>
+  <h1>Practical IT & Network Intelligence</h1>
+  <p class="tagline">
+    No fluff. No buzzwords. Just solid infrastructure, clean data, and systems that behave the way physics says they should.
+  </p>
+</header>
 
-      .hero p {
-        font-size: 1.1rem;
-        margin-bottom: 28px;
-      }
+<section>
+  <h2>Services</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Network Design &amp; DNS</h3>
+      <p>OpenWRT, OPNsense, VLANs, split DNS, AdGuard, failover WANs, and LANs that actually resolve their own hosts.</p>
+    </div>
+    <div class="card">
+      <h3>Virtualization &amp; Storage</h3>
+      <p>Proxmox, TrueNAS SCALE, ZFS, LXC, backups you can trust, and recovery plans you’ll never panic-test.</p>
+    </div>
+    <div class="card">
+      <h3>Data Analysis &amp; Automation</h3>
+      <p>PowerShell, Linux tooling, logging, audits, and scripts that save hours instead of creating new problems.</p>
+    </div>
+    <div class="card">
+      <h3>Hardening &amp; Reliability</h3>
+      <p>Firewalls, sane defaults, minimal attack surface, and systems that fail predictably instead of mysteriously.</p>
+    </div>
+  </div>
+</section>
 
-      .hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-      }
+<section>
+  <h2>Interactive Datacenter</h2>
+  <p class="tagline">A hypothetical mini-datacenter you can orbit around. Click a rack to highlight it. Built to be lightweight and not melt laptops.</p>
 
-      .hero-card {
-        background: rgba(255, 255, 255, 0.82);
-        border-radius: var(--radius-lg);
-        padding: 28px;
-        box-shadow: var(--shadow);
-        border: 1px solid rgba(23, 31, 43, 0.08);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .hero-card::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(130deg, transparent 40%, rgba(44, 194, 183, 0.25) 100%);
-        pointer-events: none;
-      }
-
-      .hero-card h3 {
-        font-size: 1.1rem;
-        margin-bottom: 18px;
-      }
-
-      .hero-card ul {
-        list-style: none;
-        display: grid;
-        gap: 14px;
-      }
-
-      .hero-card li {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 500;
-      }
-
-      .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--lagoon);
-        box-shadow: 0 0 12px var(--glow);
-      }
-
-      .section {
-        padding: 70px 0;
-      }
-
-      .section h2 {
-        font-size: clamp(2rem, 3vw, 2.8rem);
-        font-family: "Fraunces", serif;
-        color: var(--ink);
-        margin-bottom: 14px;
-      }
-
-      .section p.lead {
-        font-size: 1.05rem;
-        max-width: 720px;
-        margin-bottom: 36px;
-      }
-
-      .grid {
-        display: grid;
-        gap: 24px;
-      }
-
-      .services {
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      }
-
-      .card {
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: var(--radius-md);
-        padding: 26px;
-        border: 1px solid rgba(23, 31, 43, 0.08);
-        box-shadow: 0 10px 26px rgba(23, 31, 43, 0.08);
-      }
-
-      .card h3 {
-        margin-bottom: 12px;
-        font-size: 1.1rem;
-      }
-
-      .highlight {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 32px;
-        align-items: stretch;
-      }
-
-      .veeam-panel {
-        background: var(--coal);
-        color: var(--pearl);
-        border-radius: var(--radius-lg);
-        padding: 32px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .veeam-panel::before {
-        content: "";
-        position: absolute;
-        top: -40px;
-        right: -40px;
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        background: rgba(44, 194, 183, 0.22);
-        filter: blur(1px);
-      }
-
-      .veeam-panel h3 {
-        font-size: 1.5rem;
-        margin-bottom: 12px;
-      }
-
-      .veeam-panel ul {
-        list-style: none;
-        display: grid;
-        gap: 12px;
-        margin-top: 20px;
-      }
-
-      .veeam-panel li {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-      }
-
-      .pill {
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(44, 194, 183, 0.2);
-        margin-bottom: 14px;
-      }
-
-      .process {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      }
-
-      .process-step {
-        border-left: 2px solid rgba(23, 31, 43, 0.15);
-        padding-left: 18px;
-      }
-
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 24px;
-        margin-top: 36px;
-      }
-
-      .stat {
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: var(--radius-md);
-        padding: 24px;
-        text-align: center;
-        border: 1px solid rgba(23, 31, 43, 0.06);
-      }
-
-      .stat strong {
-        font-size: 2rem;
-        display: block;
-        color: var(--ink);
-      }
-
-      .cta {
-        background: linear-gradient(120deg, rgba(43, 140, 159, 0.9), rgba(44, 194, 183, 0.85));
-        color: var(--pearl);
-        border-radius: var(--radius-lg);
-        padding: 40px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .cta h3 {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-      }
-
-      footer {
-        padding: 30px 0 50px;
-        font-size: 0.95rem;
-        color: rgba(23, 31, 43, 0.7);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .fade-in {
-        opacity: 0;
-        transform: translateY(18px);
-        animation: fadeUp 0.8s ease forwards;
-      }
-
-      .fade-in:nth-child(2) {
-        animation-delay: 0.15s;
-      }
-
-      .fade-in:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-
-      .fade-in:nth-child(4) {
-        animation-delay: 0.45s;
-      }
-
-      @keyframes fadeUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @media (max-width: 900px) {
-        nav {
-          display: none;
-        }
-      }
-
-      @media (max-width: 720px) {
-        header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 16px;
-        }
-
-        .hero {
-          padding-top: 40px;
-        }
-
-        .cta {
-          padding: 32px;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .fade-in {
-          animation: none;
-          opacity: 1;
-          transform: none;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="page">
-      <div class="container">
-        <header>
-          <div class="logo">
-            Cape Radar IT
-            <span>Managed Technology</span>
-          </div>
-          <nav>
-            <a href="#services">Services</a>
-            <a href="#veeam">Backup & Recovery</a>
-            <a href="#process">Process</a>
-            <a href="#contact">Contact</a>
-          </nav>
-          <a class="button" href="#contact">Schedule a consult</a>
-        </header>
-
-        <section class="hero">
-          <div>
-            <h1 class="fade-in">
-              Reliable managed IT with a recovery-first strategy.
-            </h1>
-            <p class="fade-in">
-              We design, provision, and protect office networks with hosted cloud services,
-              onsite support, and recovery-first strategies that keep you online and compliant.
-            </p>
-            <div class="hero-actions fade-in">
-              <a class="button primary" href="#contact">Get a backup assessment</a>
-              <a class="button" href="#services">Explore services</a>
-            </div>
-          </div>
-          <div class="hero-card fade-in">
-            <h3>Always-on coverage for growing teams</h3>
-            <ul>
-              <li><span class="dot"></span>24/7 monitoring and response</li>
-              <li><span class="dot"></span>Cloud-first provisioning + hybrid builds</li>
-              <li><span class="dot"></span>Verified backups and recovery drills</li>
-              <li><span class="dot"></span>Disaster recovery runbooks</li>
-            </ul>
-          </div>
-        </section>
+  <div class="dc-wrap" id="dcWrap">
+    <div class="dc-topbar">
+      <div>
+        <strong>Datacenter View</strong> <span id="dcStatus">(loading…)</span>
       </div>
-
-      <section class="section" id="services">
-        <div class="container">
-          <h2>Managed IT built for uptime</h2>
-          <p class="lead">
-            We handle everything from single-location offices to multi-site organizations. Our
-            team designs infrastructure, supports users, and keeps your business protected.
-          </p>
-          <div class="grid services">
-            <div class="card fade-in">
-              <h3>Hosted Cloud Services</h3>
-              <p>
-                Microsoft 365, private cloud, and hybrid hosting with secure onboarding,
-                identity management, and continuous monitoring.
-              </p>
-            </div>
-            <div class="card fade-in">
-              <h3>Onsite Support</h3>
-              <p>
-                Fast response for deskside support, hardware maintenance, and proactive
-                equipment lifecycle planning.
-              </p>
-            </div>
-            <div class="card fade-in">
-              <h3>Network Setup & Provisioning</h3>
-              <p>
-                Structured cabling, Wi-Fi coverage maps, firewall deployment, and office
-                buildouts tailored to your workflow.
-              </p>
-            </div>
-            <div class="card fade-in">
-              <h3>Security & Compliance</h3>
-              <p>
-                Endpoint protection, patch management, MFA hardening, and audit-ready reporting
-                for regulated industries.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="veeam">
-        <div class="container highlight">
-          <div>
-            <h2>Backup & recovery, engineered around Veeam</h2>
-            <p class="lead">
-              Our backup strategy is centered on Veeam best practices: immutable storage,
-              rapid restore testing, and clear RPO/RTO targets.
-            </p>
-            <div class="stats">
-              <div class="stat">
-                <strong>15 min</strong>
-                Average restore testing cadence
-              </div>
-              <div class="stat">
-                <strong>3-2-1</strong>
-                Best practice backup architecture
-              </div>
-              <div class="stat">
-                <strong>99.99%</strong>
-                Monitoring uptime commitment
-              </div>
-            </div>
-          </div>
-          <div class="veeam-panel">
-            <span class="pill">Veeam Focus</span>
-            <h3>Recovery plans that actually work</h3>
-            <p>
-              From onsite repositories to cloud archive targets, we configure and manage your
-              Veeam environment end-to-end, with regular health checks and documentation.
-            </p>
-            <ul>
-              <li><span class="dot"></span>Immutable storage + ransomware protection</li>
-              <li><span class="dot"></span>SureBackup verification for every backup</li>
-              <li><span class="dot"></span>Instant VM + file-level restore workflows</li>
-              <li><span class="dot"></span>Recovery drills with executive reporting</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="process">
-        <div class="container">
-          <h2>Our engagement process</h2>
-          <p class="lead">
-            Clear, documented steps so your team always knows what to expect.
-          </p>
-          <div class="grid process">
-            <div class="process-step fade-in">
-              <h3>1. Discovery</h3>
-              <p>Network audit, backup inventory, and workload mapping.</p>
-            </div>
-            <div class="process-step fade-in">
-              <h3>2. Blueprint</h3>
-              <p>Design for hosted services, security posture, and recovery goals.</p>
-            </div>
-            <div class="process-step fade-in">
-              <h3>3. Deployment</h3>
-              <p>Provisioning, migration, and service onboarding with minimal downtime.</p>
-            </div>
-            <div class="process-step fade-in">
-              <h3>4. Managed Care</h3>
-              <p>Monitoring, patching, support desk, and quarterly strategy reviews.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="contact">
-        <div class="container">
-          <div class="cta">
-            <div>
-              <h3>Ready for reliable recovery?</h3>
-              <p>Let us assess your backup posture and map a path to full resilience.</p>
-            </div>
-            <div class="hero-actions">
-              <a class="button primary" href="mailto:web@caperadar.org">Email us</a>
-              <a class="button" href="tel:+19025777533">Call 902-577-7533</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="container">
-        <footer>
-          <span>© 2025 Cape Radar IT. Managed services for resilient teams.</span>
-          <span>Serving onsite, remote, and hybrid businesses.</span>
-        </footer>
+      <div class="dc-actions">
+        <button class="btn" id="dcReset" type="button">Reset view</button>
+        <button class="btn" id="dcToggle" type="button">Fullscreen</button>
       </div>
     </div>
-  </body>
+
+    <canvas class="dc-canvas" id="datacenter-view" aria-label="Interactive 3D datacenter"></canvas>
+
+    <!-- Fallback panel is hidden unless WebGL fails -->
+    <div class="notice" id="dcFallback" hidden>
+      <div><strong>3D view unavailable.</strong> <span class="warn">WebGL context could not be created</span> in this environment.</div>
+      <div style="margin-top:0.35rem">
+        Common causes: hardware acceleration disabled, remote desktop policies, older GPU/driver, or a sandbox that blocks WebGL.
+      </div>
+      <div style="margin-top:0.35rem">
+        Quick checks:
+        <ul style="margin:0.35rem 0 0 1.2rem; padding:0">
+          <li>Enable browser <span class="warn">hardware acceleration</span>, then restart the browser.</li>
+          <li>Try a different browser (Chrome/Edge/Firefox).</li>
+          <li>On Windows: Settings → System → Display → Graphics (ensure the browser uses the high‑performance GPU).</li>
+        </ul>
+      </div>
+      <div style="margin-top:0.35rem">
+        If you want, we can replace this with a <strong>static SVG diagram</strong> or a <strong>non‑WebGL canvas</strong> fallback.
+      </div>
+    </div>
+
+    <div class="dc-hint" id="dcHint">Controls: drag to rotate • scroll to zoom • click racks to highlight.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Philosophy</h2>
+  <p class="tagline">
+    Old ideas still work when they’re applied honestly. Measure first. Change one thing at a time. Document everything. The network always tells the truth—you just have to listen.
+  </p>
+</section>
+
+<footer>
+  © <span id="year"></span> caperadar.org
+</footer>
+
+<!-- Optional WebGL corner mascot canvas (auto-disables if WebGL is blocked) -->
+<canvas id="banana-mascot" aria-hidden="true"></canvas>
+
+<script type="module">
+  // Housekeeping
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const dcStatus = document.getElementById('dcStatus');
+  const dcCanvas = document.getElementById('datacenter-view');
+  const dcFallback = document.getElementById('dcFallback');
+  const dcHint = document.getElementById('dcHint');
+
+  /**
+   * Why these URLs:
+   * Use an ESM CDN that rewrites/bundles dependencies so browser module resolution works.
+   */
+  const THREE_URL = 'https://esm.sh/three@0.160.0';
+  const ORBIT_URL = 'https://esm.sh/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+  function showWebglFallback(where, err) {
+    // where: 'datacenter' | 'mascot'
+    console.error('[caperadar] WebGL unavailable (' + where + '):', err);
+
+    if (where === 'datacenter') {
+      dcStatus.textContent = '(WebGL unavailable)';
+      dcFallback.hidden = false;
+      dcHint.textContent = '3D controls disabled (WebGL unavailable).';
+      // Hide canvas to avoid blank rectangle that looks like a bug.
+      dcCanvas.style.display = 'none';
+    }
+
+    if (where === 'mascot') {
+      const c = document.getElementById('banana-mascot');
+      if (c) c.style.display = 'none';
+    }
+  }
+
+  // "Test cases" (browser-side): validate required APIs exist before we attempt WebGL.
+  function assert(cond, msg) {
+    if (!cond) throw new Error('Assertion failed: ' + msg);
+  }
+
+  function environmentPreflight() {
+    assert(typeof window !== 'undefined', 'window exists');
+    assert(typeof document !== 'undefined', 'document exists');
+    assert(!!document.createElement('canvas'), 'canvas element can be created');
+    // WebGL presence check (may still fail when creating a renderer)
+    const probe = document.createElement('canvas');
+    const gl = probe.getContext('webgl') || probe.getContext('experimental-webgl');
+    return !!gl;
+  }
+
+  async function loadThreeStack() {
+    try {
+      const THREE = await import(THREE_URL);
+      const { OrbitControls } = await import(ORBIT_URL);
+      assert(!!THREE?.Scene, 'THREE.Scene present');
+      assert(typeof OrbitControls === 'function', 'OrbitControls is a function');
+      return { THREE, OrbitControls };
+    } catch (e) {
+      dcStatus.textContent = '(3D libraries blocked)';
+      console.error('[caperadar] Failed to load Three.js stack:', e);
+      return null;
+    }
+  }
+
+  function safeCreateRenderer(THREE, canvas, opts) {
+    try {
+      const r = new THREE.WebGLRenderer({ canvas, ...opts });
+      // Some environments return a renderer but no context; validate.
+      const ctx = r.getContext && r.getContext();
+      if (!ctx) throw new Error('WebGL renderer created without a context');
+      return r;
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async function initDatacenter(stack) {
+    if (!stack) return;
+
+    const { THREE, OrbitControls } = stack;
+
+    // If WebGL is clearly not present, short-circuit.
+    let webglPresent = false;
+    try { webglPresent = environmentPreflight(); } catch (e) { webglPresent = false; }
+    if (!webglPresent) {
+      showWebglFallback('datacenter', new Error('WebGL context not available (preflight)'));
+      return;
+    }
+
+    const wrap = document.getElementById('dcWrap');
+    const canvas = dcCanvas;
+    const resetBtn = document.getElementById('dcReset');
+    const toggleBtn = document.getElementById('dcToggle');
+
+    const rendererOrErr = safeCreateRenderer(THREE, canvas, { alpha: true, antialias: true });
+    if (rendererOrErr?.error) {
+      showWebglFallback('datacenter', rendererOrErr.error);
+      return;
+    }
+    const renderer = rendererOrErr;
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x020617, 6, 18);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    const defaultCamPos = new THREE.Vector3(6.5, 4.6, 7.5);
+    camera.position.copy(defaultCamPos);
+
+    const controls = new OrbitControls(camera, canvas);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.target.set(0, 1.2, 0);
+    controls.minDistance = 4;
+    controls.maxDistance = 16;
+    controls.maxPolarAngle = Math.PI * 0.49;
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+
+    const key = new THREE.DirectionalLight(0x38bdf8, 0.8);
+    key.position.set(6, 10, 4);
+    scene.add(key);
+
+    const rim = new THREE.DirectionalLight(0xffffff, 0.35);
+    rim.position.set(-6, 6, -5);
+    scene.add(rim);
+
+    // Floor
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(24, 24),
+      new THREE.MeshStandardMaterial({ color: 0x0b1220, roughness: 0.9, metalness: 0.05 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = 0;
+    scene.add(floor);
+
+    // Aisle line
+    const aisle = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.25, 18),
+      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 1, metalness: 0 })
+    );
+    aisle.rotation.x = -Math.PI / 2;
+    aisle.position.set(0, 0.01, 0);
+    scene.add(aisle);
+
+    // Racks
+    const racks = [];
+    const rackGeo = new THREE.BoxGeometry(0.9, 2.2, 0.9);
+    const rackBaseMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.6, metalness: 0.35 });
+    const rackEdgeMat = new THREE.LineBasicMaterial({ color: 0x334155 });
+
+    function makeRack(x, z, id) {
+      const rack = new THREE.Mesh(rackGeo, rackBaseMat.clone());
+      rack.position.set(x, 1.1, z);
+      rack.userData = { id };
+
+      const edges = new THREE.EdgesGeometry(rackGeo);
+      const outline = new THREE.LineSegments(edges, rackEdgeMat);
+      rack.add(outline);
+
+      const leds = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.08, 0.55),
+        new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+      );
+      leds.position.set(0.46, 0.25, 0);
+      leds.rotation.y = Math.PI / 2;
+      rack.add(leds);
+
+      scene.add(rack);
+      racks.push(rack);
+      return rack;
+    }
+
+    let rid = 1;
+    for (let row = -3; row <= 3; row += 1.5) {
+      makeRack(-2.4, row, `Rack ${rid++}`);
+      makeRack( 2.4, row, `Rack ${rid++}`);
+    }
+
+    // Overhead "lights"
+    const overhead = new THREE.Mesh(
+      new THREE.BoxGeometry(6.5, 0.08, 0.3),
+      new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.9 })
+    );
+    overhead.position.set(0, 3.0, 0);
+    scene.add(overhead);
+
+    // Selection via raycasting
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let selected = null;
+
+    function setSelected(obj) {
+      if (selected && selected.material) {
+        selected.material.color.setHex(0x111827);
+        if (selected.material.emissive) selected.material.emissive.setHex(0x000000);
+      }
+      selected = obj;
+      if (selected && selected.material) {
+        selected.material.color.setHex(0x172554);
+        if (selected.material.emissive) selected.material.emissive.setHex(0x0ea5e9);
+      }
+      dcStatus.textContent = selected ? `(${selected.userData.id} selected)` : '(ready)';
+    }
+
+    function onPointerDown(ev) {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -(((ev.clientY - rect.top) / rect.height) * 2 - 1);
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(racks, false);
+      if (hits.length) setSelected(hits[0].object);
+    }
+    canvas.addEventListener('pointerdown', onPointerDown);
+
+    // Resize handling
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.max(1, Math.floor(rect.width));
+      const h = Math.max(1, Math.floor(rect.height));
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    resetBtn.addEventListener('click', () => {
+      camera.position.copy(defaultCamPos);
+      controls.target.set(0, 1.2, 0);
+      controls.update();
+      setSelected(null);
+    });
+
+    toggleBtn.addEventListener('click', () => {
+      const isFull = wrap.classList.toggle('dc-fullscreen');
+      toggleBtn.textContent = isFull ? 'Exit fullscreen' : 'Fullscreen';
+      resize();
+    });
+
+    // Animate
+    dcStatus.textContent = '(ready)';
+    let t = 0;
+    function tick() {
+      t += 0.01;
+      overhead.material.opacity = 0.85 + Math.sin(t) * 0.08;
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  async function initBananaMascot(stack) {
+    if (!stack) return;
+
+    const { THREE } = stack;
+
+    const canvas = document.getElementById('banana-mascot');
+    if (!canvas) return;
+
+    // If preflight says no WebGL, skip without error.
+    let webglPresent = false;
+    try { webglPresent = environmentPreflight(); } catch (e) { webglPresent = false; }
+    if (!webglPresent) {
+      showWebglFallback('mascot', new Error('WebGL context not available (preflight)'));
+      return;
+    }
+
+    const rendererOrErr = safeCreateRenderer(THREE, canvas, { alpha: true, antialias: true });
+    if (rendererOrErr?.error) {
+      showWebglFallback('mascot', rendererOrErr.error);
+      return;
+    }
+    const renderer = rendererOrErr;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    function resizeMascot() {
+      const w = canvas.clientWidth || 220;
+      const h = canvas.clientHeight || 220;
+      renderer.setSize(w, h, false);
+    }
+    resizeMascot();
+    window.addEventListener('resize', resizeMascot);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+    camera.position.set(0, 1.4, 3.2);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const key = new THREE.DirectionalLight(0x38bdf8, 0.8);
+    key.position.set(2, 4, 3);
+    scene.add(key);
+
+    // Simple procedural mascot (no GLB dependency)
+    const banana = new THREE.Group();
+    const yellow = new THREE.MeshStandardMaterial({ color: 0xffe135, roughness: 0.35, metalness: 0.05 });
+    const dark = new THREE.MeshStandardMaterial({ color: 0x0b1220, roughness: 0.9, metalness: 0 });
+
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.25, 1.1, 6, 12), yellow);
+    body.rotation.z = 0.25;
+    banana.add(body);
+
+    const hat = new THREE.Mesh(new THREE.SphereGeometry(0.25, 18, 18), new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.6 }));
+    hat.position.set(0.05, 0.8, 0);
+    hat.scale.set(1.1, 0.7, 1.1);
+    banana.add(hat);
+
+    const faceL = new THREE.Mesh(new THREE.SphereGeometry(0.03, 12, 12), dark);
+    const faceR = faceL.clone();
+    faceL.position.set(0.02, 0.55, 0.22);
+    faceR.position.set(0.15, 0.53, 0.22);
+    banana.add(faceL, faceR);
+
+    banana.scale.setScalar(1.0);
+    banana.position.y = -0.6;
+    scene.add(banana);
+
+    let t = 0;
+    function animate() {
+      t += 0.01;
+      banana.rotation.y = Math.sin(t) * 0.25;
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+
+  // Boot
+  (async () => {
+    const stack = await loadThreeStack();
+    await initDatacenter(stack);
+    await initBananaMascot(stack);
+  })();
+</script>
+
+</body>
 </html>
