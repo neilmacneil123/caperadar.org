@@ -15,6 +15,8 @@
       --border: #1e293b;
       --warn: #f59e0b;
       --bad: #ef4444;
+      --good: #22c55e;
+      --input: #0b1220;
     }
     * { box-sizing: border-box; }
     body {
@@ -80,6 +82,152 @@
       padding: 2rem 1.5rem;
       text-align: center;
       color: var(--muted);
+    }
+
+
+
+    /* Cloudflare Access app planner */
+    .builder {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .builder-form,
+    .builder-output {
+      background: linear-gradient(180deg, #020617, #020617aa);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .field {
+      display: grid;
+      gap: 0.35rem;
+      margin-bottom: 1rem;
+    }
+    .field label {
+      color: var(--fg);
+      font-weight: 650;
+    }
+    .field small,
+    .builder-note {
+      color: var(--muted);
+    }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      background: var(--input);
+      color: var(--fg);
+      padding: 0.75rem 0.85rem;
+      font: inherit;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid rgba(56,189,248,0.35);
+      border-color: var(--accent);
+    }
+    .builder-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+    .builder-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .cloudflare-auth {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid rgba(56,189,248,0.24);
+      border-radius: 0.9rem;
+      background: rgba(56,189,248,0.06);
+    }
+    .inline-status {
+      min-height: 1.4rem;
+      margin-top: 0.65rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .inline-status.good { color: var(--good); }
+    .inline-status.bad { color: var(--bad); }
+    .btn-primary {
+      border-color: rgba(56,189,248,0.55);
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      color: #00111f;
+      font-weight: 800;
+    }
+    .output-block {
+      margin-top: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.9rem;
+      overflow: hidden;
+      background: rgba(15, 23, 42, 0.72);
+    }
+    .output-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .copy-btn {
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      background: #020617;
+      color: var(--fg);
+      cursor: pointer;
+      padding: 0.3rem 0.55rem;
+    }
+    pre {
+      margin: 0;
+      padding: 1rem;
+      overflow-x: auto;
+      color: #dbeafe;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .checklist {
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .checklist li {
+      display: grid;
+      grid-template-columns: 1.5rem 1fr;
+      gap: 0.6rem;
+      color: var(--muted);
+    }
+    .checklist li::before {
+      content: "✓";
+      color: var(--good);
+      font-weight: 900;
+    }
+    .security-callout {
+      margin-top: 1rem;
+      padding: 0.85rem;
+      border: 1px solid rgba(245,158,11,0.35);
+      border-radius: 0.85rem;
+      background: rgba(245,158,11,0.08);
+      color: var(--muted);
+    }
+    .security-callout strong { color: var(--fg); }
+
+    @media (max-width: 860px) {
+      .builder { grid-template-columns: 1fr; }
+      .builder-row { grid-template-columns: 1fr; }
     }
 
     /* Corner mascot canvas (optional) */
@@ -238,6 +386,131 @@
   </div>
 </section>
 
+
+<section id="access-builder">
+  <h2>Cloudflare Access App Builder</h2>
+  <p class="tagline">
+    Enter an internal URL once, then generate the Cloudflare Tunnel ingress, DNS route, and Zero Trust Access API payloads needed to publish it safely behind Access.
+  </p>
+
+  <div class="builder">
+    <form class="builder-form" id="accessForm">
+      <div class="field">
+        <label for="publicHost">External hostname</label>
+        <input id="publicHost" name="publicHost" type="text" value="proxmox.example.com" autocomplete="off" />
+        <small>The hostname users will open from the internet. It must live in a Cloudflare-managed zone.</small>
+      </div>
+
+      <div class="field">
+        <label for="privateOrigin">Private origin address</label>
+        <input id="privateOrigin" name="privateOrigin" type="text" value="https://10.0.10.25:8006" autocomplete="off" />
+        <small>Use the address that your cloudflared connector can reach from inside the LAN.</small>
+      </div>
+
+      <div class="cloudflare-auth">
+        <div class="builder-row">
+          <div class="field">
+            <label for="accountId">Cloudflare account ID</label>
+            <input id="accountId" name="accountId" type="text" placeholder="32-character account ID" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="apiToken">API token for tunnel lookup</label>
+            <input id="apiToken" name="apiToken" type="password" placeholder="Cloudflare Tunnel Read token" autocomplete="off" />
+          </div>
+        </div>
+        <button class="btn" id="fetchTunnels" type="button">Fetch existing tunnels</button>
+        <div class="inline-status" id="tunnelFetchStatus">Optional: fetch your existing cloudflared tunnels and select one instead of typing a tunnel name.</div>
+      </div>
+
+      <div class="builder-row">
+        <div class="field">
+          <label for="appName">Access app name</label>
+          <input id="appName" name="appName" type="text" value="Proxmox Admin" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="tunnelSelect">Tunnel</label>
+          <select id="tunnelSelect" name="tunnelSelect">
+            <option value="__manual__">Manual tunnel name</option>
+          </select>
+          <input id="tunnelName" name="tunnelName" type="text" value="homelab-edge" autocomplete="off" />
+          <small>Select a fetched tunnel or leave “Manual tunnel name” selected to type one.</small>
+        </div>
+      </div>
+
+      <div class="builder-row">
+        <div class="field">
+          <label for="policyType">Access policy</label>
+          <select id="policyType" name="policyType">
+            <option value="email_domain">Allow email domain</option>
+            <option value="email">Allow specific emails</option>
+            <option value="everyone">Require login from anyone</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="sessionDuration">Session duration</label>
+          <select id="sessionDuration" name="sessionDuration">
+            <option value="8h">8 hours</option>
+            <option value="24h">24 hours</option>
+            <option value="168h">7 days</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="allowedValues">Allowed domains or emails</label>
+        <textarea id="allowedValues" name="allowedValues" rows="3">example.com</textarea>
+        <small>Comma or newline separated. Use domains for “Allow email domain” and complete addresses for “Allow specific emails”.</small>
+      </div>
+
+      <div class="builder-row">
+        <div class="field">
+          <label for="tlsMode">Origin TLS</label>
+          <select id="tlsMode" name="tlsMode">
+            <option value="verify">Verify certificate</option>
+            <option value="no_tls_verify">No TLS verify / self-signed</option>
+            <option value="http">Plain HTTP origin</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="appPath">Optional path</label>
+          <input id="appPath" name="appPath" type="text" placeholder="/admin/*" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="builder-actions">
+        <button class="btn btn-primary" type="submit">Generate setup</button>
+        <button class="btn" id="fillExample" type="button">Load NAS example</button>
+      </div>
+
+      <div class="security-callout">
+        <strong>Token handling:</strong> API tokens are optional, never stored, and only sent directly to Cloudflare's API when you click “Fetch existing tunnels.” Generated commands still use local environment variables.
+      </div>
+    </form>
+
+    <div class="builder-output" aria-live="polite">
+      <h3 style="margin-top:0">Generated plan</h3>
+      <p class="builder-note" id="planSummary">Change the form and click generate to build a tunnel + Access checklist.</p>
+
+      <ul class="checklist" id="accessChecklist"></ul>
+
+      <div class="output-block">
+        <div class="output-head"><span>cloudflared ingress config</span><button class="copy-btn" type="button" data-copy="ingressOutput">Copy</button></div>
+        <pre id="ingressOutput"></pre>
+      </div>
+
+      <div class="output-block">
+        <div class="output-head"><span>terminal commands</span><button class="copy-btn" type="button" data-copy="commandsOutput">Copy</button></div>
+        <pre id="commandsOutput"></pre>
+      </div>
+
+      <div class="output-block">
+        <div class="output-head"><span>Access API payloads</span><button class="copy-btn" type="button" data-copy="apiOutput">Copy</button></div>
+        <pre id="apiOutput"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section>
   <h2>Interactive Datacenter</h2>
   <p class="tagline">A hypothetical mini-datacenter you can orbit around. Click a rack to highlight it. Built to be lightweight and not melt laptops.</p>
@@ -300,6 +573,249 @@
   const dcCanvas = document.getElementById('datacenter-view');
   const dcFallback = document.getElementById('dcFallback');
   const dcHint = document.getElementById('dcHint');
+  const tunnelSelect = document.getElementById('tunnelSelect');
+  const tunnelNameInput = document.getElementById('tunnelName');
+  const tunnelFetchStatus = document.getElementById('tunnelFetchStatus');
+  let fetchedTunnels = [];
+
+
+
+  function csvLines(value) {
+    return value.split(/[,\n]/).map(v => v.trim()).filter(Boolean);
+  }
+
+  function shellQuote(value) {
+    return "'" + String(value).replace(/'/g, "'\\''") + "'";
+  }
+
+  function yamlQuote(value) {
+    return JSON.stringify(String(value));
+  }
+
+  function selectedTunnel() {
+    const selectedId = tunnelSelect.value;
+    if (selectedId === '__manual__') return null;
+    return fetchedTunnels.find(tunnel => tunnel.id === selectedId) || null;
+  }
+
+  function setTunnelStatus(message, tone = '') {
+    tunnelFetchStatus.textContent = message;
+    tunnelFetchStatus.className = `inline-status ${tone}`.trim();
+  }
+
+  function tunnelLabel(tunnel) {
+    const status = tunnel.status ? ` · ${tunnel.status}` : '';
+    const configSource = tunnel.config_src ? ` · ${tunnel.config_src}` : '';
+    return `${tunnel.name || tunnel.id}${status}${configSource}`;
+  }
+
+  function renderTunnelOptions(tunnels) {
+    const current = tunnelSelect.value;
+    tunnelSelect.replaceChildren(new Option('Manual tunnel name', '__manual__'));
+    tunnels.forEach(tunnel => {
+      const option = new Option(tunnelLabel(tunnel), tunnel.id);
+      option.dataset.name = tunnel.name || '';
+      tunnelSelect.appendChild(option);
+    });
+    tunnelSelect.value = tunnels.some(tunnel => tunnel.id === current) ? current : '__manual__';
+  }
+
+  function normalizeHostname(host) {
+    return host.replace(/^https?:\/\//i, '').replace(/\/.*$/, '').trim().toLowerCase();
+  }
+
+  function normalizePath(path) {
+    if (!path.trim()) return '';
+    return path.trim().startsWith('/') ? path.trim() : '/' + path.trim();
+  }
+
+  function buildPolicyInclude(type, values) {
+    if (type === 'everyone') return [{ everyone: {} }];
+    if (type === 'email') return values.map(email => ({ email: { email } }));
+    return values.map(domain => ({ email_domain: { domain } }));
+  }
+
+  function getAccessFormData() {
+    const data = Object.fromEntries(new FormData(document.getElementById('accessForm')).entries());
+    const publicHost = normalizeHostname(data.publicHost || 'app.example.com');
+    const appPath = normalizePath(data.appPath || '');
+    let privateOrigin = (data.privateOrigin || 'http://10.0.0.10:8080').trim();
+    if (data.tlsMode === 'http' && privateOrigin.startsWith('https://')) {
+      privateOrigin = privateOrigin.replace(/^https:/i, 'http:');
+    }
+    const tunnel = selectedTunnel();
+    const tunnelName = tunnel?.name || (data.tunnelName || 'internal-apps').trim();
+    const tunnelId = tunnel?.id || '';
+    return {
+      publicHost,
+      privateOrigin,
+      appName: (data.appName || publicHost).trim(),
+      tunnelName,
+      tunnelId,
+      tunnelStatus: tunnel?.status || '',
+      tunnelConfigSource: tunnel?.config_src || '',
+      policyType: data.policyType || 'email_domain',
+      sessionDuration: data.sessionDuration || '8h',
+      tlsMode: data.tlsMode || 'verify',
+      allowedValues: csvLines(data.allowedValues || 'example.com'),
+      appPath
+    };
+  }
+
+  function renderAccessPlan() {
+    const data = getAccessFormData();
+    const originOptions = data.tlsMode === 'no_tls_verify' ? '\n    noTLSVerify: true' : '';
+    const tunnelReference = data.tunnelId || data.tunnelName;
+    const credentialPath = data.tunnelId ? `/etc/cloudflared/${data.tunnelId}.json` : '/etc/cloudflared/<tunnel-id>.json';
+    const ingress = `tunnel: ${yamlQuote(tunnelReference)}\ncredentials-file: ${credentialPath}\n\ningress:\n  - hostname: ${yamlQuote(data.publicHost)}\n    service: ${yamlQuote(data.privateOrigin)}${originOptions}\n  - service: http_status:404`;
+
+    const createTunnelCommand = data.tunnelId
+      ? `# Existing tunnel selected: ${data.tunnelName} (${data.tunnelId}).\n# Skip tunnel creation unless you need a new connector.`
+      : `cloudflared tunnel create ${shellQuote(data.tunnelName)}`;
+    const tunnelRouteTarget = data.tunnelId || data.tunnelName;
+    const commands = `# One-time local shell setup. Use a narrowly scoped API token; do not paste it into this web page.\nexport CLOUDFLARE_ACCOUNT_ID="your-account-id"\nexport CLOUDFLARE_ZONE_ID="your-zone-id"\nexport CLOUDFLARE_API_TOKEN="your-api-token"\n\n# Create or reuse the connector, then route DNS to it.\n${createTunnelCommand}\ncloudflared tunnel route dns ${shellQuote(tunnelRouteTarget)} ${shellQuote(data.publicHost)}\n\n# Save the generated ingress YAML on the connector host, then run it.\nsudo install -d -m 0755 /etc/cloudflared\n# Copy the tunnel credential JSON to ${credentialPath}, then save the generated YAML.\nsudo nano /etc/cloudflared/config.yml\nsudo cloudflared service install\nsudo systemctl enable --now cloudflared`;
+
+    const accessDomain = `${data.publicHost}${data.appPath || ''}`;
+    const appPayload = {
+      name: data.appName,
+      domain: accessDomain,
+      type: 'self_hosted',
+      session_duration: data.sessionDuration,
+      app_launcher_visible: true,
+      destinations: [
+        {
+          type: 'public',
+          uri: accessDomain
+        }
+      ]
+    };
+    const policyPayload = {
+      name: `${data.appName} allow`,
+      decision: 'allow',
+      include: buildPolicyInclude(data.policyType, data.allowedValues)
+    };
+    const api = `# Create the Access self-hosted application.\ncurl --request POST \\\n  --url \"https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps\" \\\n  --header \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\" \\\n  --header \"Content-Type: application/json\" \\\n  --data '${JSON.stringify(appPayload, null, 2)}'\n\n# Copy the returned app ID, then attach the allow policy.\nexport ACCESS_APP_ID=\"returned-app-id\"\ncurl --request POST \\\n  --url \"https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$ACCESS_APP_ID/policies\" \\\n  --header \"Authorization: Bearer $CLOUDFLARE_API_TOKEN\" \\\n  --header \"Content-Type: application/json\" \\\n  --data '${JSON.stringify(policyPayload, null, 2)}'`;
+
+    const tunnelSummary = data.tunnelId ? ` using existing tunnel ${data.tunnelName}` : ` using tunnel ${data.tunnelName}`;
+    document.getElementById('planSummary').textContent = `Publish ${data.privateOrigin} as https://${data.publicHost}${data.appPath || ''}${tunnelSummary} behind a ${data.sessionDuration} Cloudflare Access session.`;
+    document.getElementById('ingressOutput').textContent = ingress;
+    document.getElementById('commandsOutput').textContent = commands;
+    document.getElementById('apiOutput').textContent = api;
+
+    const policyText = data.policyType === 'everyone'
+      ? 'Require a Cloudflare Access login before proxying traffic.'
+      : `Allow only: ${data.allowedValues.join(', ') || 'no entries yet'}.`;
+    const checklist = document.getElementById('accessChecklist');
+    checklist.replaceChildren();
+    [
+      data.tunnelId ? `Use existing Cloudflare Tunnel “${data.tunnelName}” (${data.tunnelStatus || 'status unknown'}).` : `Create or confirm a Cloudflare Tunnel named “${data.tunnelName}”.`,
+      `Route ${data.publicHost} to the tunnel DNS target.`,
+      `Add the ingress rule so cloudflared reaches ${data.privateOrigin} from inside the LAN.`,
+      `Create the self-hosted Access application for ${data.publicHost}${data.appPath || ''}.`,
+      policyText,
+      'Test from an external network before sharing the URL.'
+    ].forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      checklist.appendChild(li);
+    });
+  }
+
+  async function fetchCloudflareTunnels() {
+    const accountId = document.getElementById('accountId').value.trim();
+    const apiToken = document.getElementById('apiToken').value.trim();
+    if (!accountId || !apiToken) {
+      setTunnelStatus('Enter a Cloudflare account ID and API token before fetching tunnels.', 'bad');
+      return;
+    }
+
+    setTunnelStatus('Fetching cloudflared tunnels from Cloudflare…');
+    const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(accountId)}/tunnels`;
+    try {
+      const allTunnels = [];
+      let page = 1;
+      let totalPages = 1;
+      do {
+        const url = `${baseUrl}?per_page=100&page=${page}`;
+        const res = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok || payload.success === false) {
+          const detail = payload.errors?.map(err => err.message).join('; ') || `${res.status} ${res.statusText}`;
+          throw new Error(detail);
+        }
+        allTunnels.push(...(payload.result || []));
+        totalPages = payload.result_info?.total_pages || page;
+        page += 1;
+      } while (page <= totalPages);
+
+      fetchedTunnels = allTunnels.filter(tunnel => !tunnel.tun_type || tunnel.tun_type === 'cfd_tunnel');
+      renderTunnelOptions(fetchedTunnels);
+      if (fetchedTunnels.length === 0) {
+        tunnelNameInput.disabled = false;
+        setTunnelStatus('No cloudflared tunnels were returned for this account.', 'bad');
+        return;
+      }
+      tunnelSelect.value = fetchedTunnels[0].id;
+      tunnelNameInput.value = fetchedTunnels[0].name || fetchedTunnels[0].id;
+      tunnelNameInput.disabled = true;
+      setTunnelStatus(`Loaded ${fetchedTunnels.length} cloudflared tunnel${fetchedTunnels.length === 1 ? '' : 's'} from Cloudflare.`, 'good');
+      renderAccessPlan();
+    } catch (err) {
+      console.error('[caperadar] Failed to fetch Cloudflare tunnels:', err);
+      setTunnelStatus(`Could not fetch tunnels: ${err.message}. Confirm token permissions and browser access to api.cloudflare.com.`, 'bad');
+    }
+  }
+
+  document.getElementById('fetchTunnels').addEventListener('click', fetchCloudflareTunnels);
+
+  tunnelSelect.addEventListener('change', () => {
+    const tunnel = selectedTunnel();
+    tunnelNameInput.disabled = !!tunnel;
+    if (tunnel) tunnelNameInput.value = tunnel.name || tunnel.id;
+    renderAccessPlan();
+  });
+
+  tunnelNameInput.addEventListener('input', () => {
+    if (tunnelSelect.value !== '__manual__') return;
+    renderAccessPlan();
+  });
+
+  document.getElementById('accessForm').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    renderAccessPlan();
+  });
+
+  document.getElementById('fillExample').addEventListener('click', () => {
+    document.getElementById('publicHost').value = 'nas.example.com';
+    document.getElementById('privateOrigin').value = 'https://192.168.1.50:5001';
+    document.getElementById('appName').value = 'NAS Console';
+    tunnelSelect.value = '__manual__';
+    tunnelNameInput.disabled = false;
+    document.getElementById('tunnelName').value = 'home-edge';
+    document.getElementById('policyType').value = 'email';
+    document.getElementById('allowedValues').value = 'owner@example.com\nadmin@example.com';
+    document.getElementById('tlsMode').value = 'no_tls_verify';
+    renderAccessPlan();
+  });
+
+  document.querySelectorAll('[data-copy]').forEach(button => {
+    button.addEventListener('click', async () => {
+      const target = document.getElementById(button.dataset.copy);
+      if (!target) return;
+      await navigator.clipboard.writeText(target.textContent);
+      const old = button.textContent;
+      button.textContent = 'Copied';
+      setTimeout(() => { button.textContent = old; }, 1200);
+    });
+  });
+
+  renderAccessPlan();
+
 
   /**
    * Why these URLs:
