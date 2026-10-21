@@ -1,21 +1,7 @@
-# caperadar.org
+# CapeRadar music launcher
 
-Static site for `caperadar.org`, served by Nginx in Docker.
+A responsive, buildless homepage for https://caperadar.org and https://www.caperadar.org, based on the original CapeRadar site and its mascot.
 
-## Contents
+Six direct links launch SynthWeb, CS-30, 606 Drums, Pocket Band, Fretboard, and Tuner. No analytics, third-party assets, runtime JavaScript or installation required. The previous IT landing page is preserved in `legacy-index.html` but is not published in the image.
 
-- `index.html`: single-page site with a Cloudflare Access setup generator
-- `Dockerfile`: minimal Nginx image
-- `docker-compose.yml`: local container runner
-
-## Run
-
-```bash
-docker compose up --build
-```
-
-The site will be available at `http://localhost:8080`. The Cloudflare Access App Builder runs in the browser, can optionally query existing Cloudflare Tunnel records with a read-scoped API token, and generates local `cloudflared` commands, ingress YAML, and API payloads without storing API tokens.
-
-## Notes
-
-The USMT Python tooling has been moved out of this repository into `/root/usmt-tui`.
+Run locally with `docker compose up --build` (port 8080). Production uses the existing webapps Compose project on VM195, exposing port 8088 through the existing Cloudflare Tunnel. Nginx makes the homepage revalidate so updates are visible.
